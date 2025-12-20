@@ -3,265 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Gửi Nhím - Một người đặc biệt</title>
+    <title>Gửi Nhím ❤️</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-pink: #ff4d6d;
-            --soft-pink: #ffc2d1;
-            --bg-pink: #fff0f3;
+        :root { --pink: #ff4d6d; --bg: #fff0f3; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            background: var(--bg); font-family: 'Quicksand', sans-serif;
+            overflow: hidden; 
         }
 
-        * { box-sizing: border-box; }
-
-        body { 
-            background: var(--bg-pink); 
-            margin: 0; 
-            font-family: 'Quicksand', sans-serif; 
-            overflow: hidden;
-            height: 100vh;
-            width: 100vw;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        /* Container tổng để căn giữa mọi thứ */
+        .wrapper {
+            display: flex; justify-content: center; align-items: center;
+            width: 100%; height: 100%; position: relative;
         }
 
         /* Intro */
         #intro {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--soft-pink);
-            display: flex; justify-content: center; align-items: center;
-            z-index: 9999; transition: opacity 1s ease; text-align: center;
+            position: fixed; inset: 0; background: #ffc2d1;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 1000; transition: opacity 0.8s; color: white; text-align: center;
         }
-        .intro-content { color: white; padding: 20px; }
-        .typing {
-            font-family: 'Dancing Script', cursive; font-size: 2.5rem;
-            width: 0; white-space: nowrap; overflow: hidden;
-            border-right: 3px solid; margin: 0 auto;
-            animation: typing 3s steps(30, end) forwards;
-        }
-        @keyframes typing { from { width: 0; } to { width: 100%; } }
-        
         #start-btn {
-            margin-top: 30px; padding: 15px 40px; font-size: 1.2rem;
-            background: white; color: var(--primary-pink); border: none;
-            border-radius: 50px; cursor: pointer; font-weight: bold;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            margin-top: 20px; padding: 15px 40px; border-radius: 50px; border: none;
+            background: white; color: var(--pink); font-weight: bold; cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1); font-size: 1.1rem;
         }
 
-        /* Gallery - Căn giữa tuyệt đối */
-        #gallery-section {
-            display: none; 
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 5;
-            cursor: pointer;
-        }
-
-        .photo-wrapper {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%); /* Luôn ở giữa màn hình */
-            width: 90%;
-            max-width: 320px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        /* Gallery - Khóa vào giữa */
+        #main-app { display: none; width: 100%; height: 100%; }
+        
+        .gallery-content {
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            width: 100%; height: 100%; position: relative;
         }
 
         .polaroid {
-            background: white; 
-            padding: 10px 10px 45px 10px;
-            box-shadow: 0 15px 45px rgba(255, 77, 109, 0.2);
-            border-radius: 5px; 
-            width: 100%;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: white; padding: 10px 10px 50px 10px; border-radius: 5px;
+            box-shadow: 0 15px 45px rgba(255, 77, 109, 0.25);
+            width: 85%; max-width: 320px; transition: 0.3s ease;
+            position: relative; z-index: 10;
         }
+        .polaroid img { width: 100%; height: 380px; object-fit: cover; border-radius: 2px; }
+        .caption { font-family: 'Dancing Script', cursive; font-size: 1.6rem; text-align: center; margin-top: 15px; color: #444; }
 
-        .polaroid img {
-            width: 100%;
-            height: 350px; 
-            object-fit: cover;
-            border-radius: 2px;
-            pointer-events: none;
-        }
-
-        .polaroid .caption {
-            font-family: 'Dancing Script', cursive;
-            margin-top: 15px; font-size: 1.5rem; color: #444;
-            text-align: center;
-        }
-
-        .counter {
-            margin-top: 25px;
-            color: var(--primary-pink);
-            font-weight: bold;
-            background: white;
-            padding: 5px 20px;
-            border-radius: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-
-        /* Lời nhắn cuối */
-        #letter-section {
-            display: none; 
-            position: fixed;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 90%; max-width: 450px;
-            z-index: 10;
-        }
-
-        .letter-paper {
-            background: white; padding: 35px; border-radius: 15px;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.1); line-height: 1.8;
-            border: 1px solid #ffeef2;
-        }
-        .letter-paper h2 { font-family: 'Dancing Script'; color: var(--primary-pink); margin-top: 0; }
-
-        /* Lung linh hơn */
-        .heart { position: fixed; top: -10%; color: var(--primary-pink); z-index: 1; animation: fall linear forwards; }
-        .sparkle { position: fixed; background: white; border-radius: 50%; animation: blink 2s infinite; z-index: 1; }
-        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
-        @keyframes blink { 0%, 100% { opacity: 0; } 50% { opacity: 0.8; } }
-
-        .hint { 
-            position: absolute; top: 10%; width: 100%; text-align: center;
-            color: var(--primary-pink); font-size: 0.9rem; font-weight: 600;
-            animation: pulse 2s infinite; 
-        }
+        .counter { margin-top: 25px; color: var(--pink); font-weight: bold; background: white; padding: 6px 20px; border-radius: 20px; z-index: 10; }
+        .hint { position: absolute; top: 10%; width: 100%; text-align: center; color: var(--pink); animation: pulse 2s infinite; font-weight: 600; }
         @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
 
-        /* Nút Loa báo hiệu nhạc */
-        #music-status {
-            position: fixed; top: 20px; right: 20px;
-            background: rgba(255,255,255,0.8);
-            padding: 8px; border-radius: 50%;
-            z-index: 1000; display: none;
+        /* Bức thư cuối */
+        #letter {
+            display: none; position: fixed; inset: 0; background: var(--bg);
+            z-index: 2000; justify-content: center; align-items: center;
         }
+        .letter-content {
+            background: white; padding: 30px; border-radius: 15px; width: 90%; max-width: 450px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); line-height: 1.8;
+        }
+        .letter-content h2 { font-family: 'Dancing Script'; color: var(--pink); margin: 0 0 15px 0; }
+
+        /* Hiệu ứng tim */
+        .heart { position: fixed; top: -10%; color: var(--pink); z-index: 1; animation: fall linear forwards; }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <div id="music-status">🎵</div>
-
     <div id="intro">
-        <div class="intro-content">
-            <h2 class="typing">Gửi Nhím - Món quà bí mật...</h2>
-            <button id="start-btn">Mở ra ngay ❤️</button>
+        <h2 style="font-family: 'Dancing Script'; font-size: 2.8rem;">Gửi Nhím... ❤️</h2>
+        <p>Tớ có một điều bất ngờ dành cho cậu</p>
+        <button id="start-btn">Mở quà ngay</button>
+    </div>
+
+    <audio id="bg-music" loop>
+        <source src="nhac.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="wrapper">
+        <div id="main-app">
+            <div class="gallery-content">
+                <div class="hint">Chạm vào ảnh để xem kỷ niệm tiếp theo nhé...</div>
+                <div id="photo-box" class="polaroid"></div>
+                <div class="counter"><span id="cur">1</span> / 32</div>
+            </div>
+        </div>
+
+        <div id="letter">
+            <div class="letter-content">
+                <h2>Gửi Nhím,</h2>
+                <p>Chúc mừng sinh nhật cô gái tuyệt vời nhất của anh! Hy vọng món quà nhỏ này sẽ làm em vui. Anh yêu em rất nhiều! ❤️</p>
+                <p style="text-align: right; font-family: 'Dancing Script'; font-size: 2rem; color: var(--pink); margin: 0;">Tiến</p>
+            </div>
         </div>
     </div>
 
-    <div style="position: absolute; left: -9999px; visibility: hidden;">
-        <div id="player"></div>
-    </div>
-
-    <div id="gallery-section">
-        <div class="hint">Chạm vào màn hình để lật kỷ niệm tiếp theo...</div>
-        <div class="photo-wrapper">
-            <div id="photo-content" class="polaroid"></div>
-            <div class="counter"><span id="current-num">1</span> / 32</div>
-        </div>
-    </div>
-
-    <div id="letter-section">
-        <div class="letter-paper">
-            <h2>Gửi Nhím,</h2>
-            <p>
-                Cảm ơn em đã cùng anh đi qua 32 khoảnh khắc này. Từng tấm ảnh đều là những mảnh ghép hạnh phúc mà anh muốn lưu giữ mãi mãi. 
-                Chúc mừng sinh nhật cô gái tuyệt vời nhất! Yêu em rất nhiều ❤️
-            </p>
-            <p style="text-align: right; font-family: 'Dancing Script'; font-size: 1.8rem; color: var(--primary-pink); margin-bottom: 0;">Tiến</p>
-        </div>
-    </div>
-
-    <script src="https://www.youtube.com/iframe_api"></script>
     <script>
-        let player;
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('player', {
-                height: '0', width: '0',
-                videoId: '0_fK-oK8N9s', // ID bài AMEE
-                playerVars: { 'autoplay': 0, 'controls': 0, 'rel': 0 },
-                events: { 'onReady': onPlayerReady }
-            });
-        }
-        function onPlayerReady(event) { console.log("Music Ready"); }
-
+        const photos = 32;
+        let current = 1;
         const startBtn = document.getElementById('start-btn');
-        const intro = document.getElementById('intro');
-        const gallerySection = document.getElementById('gallery-section');
-        const letterSection = document.getElementById('letter-section');
-        const photoContent = document.getElementById('photo-content');
-        const currentNumDisplay = document.getElementById('current-num');
-        const musicStatus = document.getElementById('music-status');
+        const mainApp = document.getElementById('main-app');
+        const letter = document.getElementById('letter');
+        const photoBox = document.getElementById('photo-box');
+        const music = document.getElementById('bg-music');
 
-        let currentIndex = 1;
-        const totalPhotos = 32;
-
-        startBtn.addEventListener('click', () => {
-            intro.style.opacity = '0';
-            // Phát nhạc ngay khi click nút Start
-            if (player && player.playVideo) {
-                player.playVideo();
-                musicStatus.style.display = 'block';
-            }
+        startBtn.onclick = () => {
+            document.getElementById('intro').style.opacity = '0';
+            // PHÁT NHẠC MP3 KHI CLICK
+            music.play().catch(e => console.log("Lỗi phát nhạc:", e));
             
             setTimeout(() => {
-                intro.style.display = 'none';
-                gallerySection.style.display = 'block';
-                showPhoto(currentIndex);
-            }, 1000);
-        });
+                document.getElementById('intro').style.display = 'none';
+                mainApp.style.display = 'block';
+                renderPhoto();
+            }, 800);
+        };
 
-        function showPhoto(index) {
-            // Hiệu ứng lật ảnh lung linh
-            photoContent.style.opacity = '0';
-            photoContent.style.transform = 'scale(0.8) rotate(-5deg)';
-            
+        function renderPhoto() {
+            photoBox.style.opacity = '0';
+            photoBox.style.transform = 'scale(0.8)';
             setTimeout(() => {
-                photoContent.innerHTML = `
-                    <img src="img/${index}.jpg" onerror="this.src='https://via.placeholder.com/300x350?text=Memory+${index}'">
-                    <div class="caption">Memory #${index}</div>
+                photoBox.innerHTML = `
+                    <img src="img/${current}.jpg" onerror="this.src='https://via.placeholder.com/300x400?text=Kỷ+niệm+${current}'">
+                    <div class="caption">Memory #${current}</div>
                 `;
-                photoContent.style.opacity = '1';
-                photoContent.style.transform = `scale(1) rotate(${Math.random() * 6 - 3}deg)`;
+                photoBox.style.opacity = '1';
+                photoBox.style.transform = 'scale(1) rotate(' + (Math.random() * 6 - 3) + 'deg)';
+                document.getElementById('cur').innerText = current;
             }, 200);
         }
 
-        gallerySection.addEventListener('click', () => {
-            if (currentIndex < totalPhotos) {
-                currentIndex++;
-                currentNumDisplay.innerText = currentIndex;
-                showPhoto(currentIndex);
+        mainApp.onclick = () => {
+            if (current < photos) {
+                current++;
+                renderPhoto();
             } else {
-                gallerySection.style.display = 'none';
-                letterSection.style.display = 'block';
+                mainApp.style.display = 'none';
+                letter.style.display = 'flex';
             }
-        });
+        };
 
-        // Hạt lấp lánh và Tim bay
-        function createEffect() {
-            const heart = document.createElement('div');
-            heart.classList.add('heart');
-            heart.innerHTML = '❤️';
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.fontSize = Math.random() * 15 + 10 + 'px';
-            heart.style.animationDuration = Math.random() * 3 + 2 + 's';
-            document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 5000);
-
-            const sparkle = document.createElement('div');
-            sparkle.classList.add('sparkle');
-            const size = Math.random() * 4 + 2 + 'px';
-            sparkle.style.width = size; sparkle.style.height = size;
-            sparkle.style.left = Math.random() * 100 + 'vw';
-            sparkle.style.top = Math.random() * 100 + 'vh';
-            document.body.appendChild(sparkle);
-            setTimeout(() => sparkle.remove(), 2000);
-        }
-        setInterval(createEffect, 200);
+        // Hiệu ứng tim bay
+        setInterval(() => {
+            const h = document.createElement('div');
+            h.className = 'heart'; h.innerHTML = '❤️';
+            h.style.left = Math.random() * 100 + 'vw';
+            h.style.fontSize = (Math.random() * 10 + 15) + 'px';
+            h.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            document.body.appendChild(h);
+            setTimeout(() => h.remove(), 5000);
+        }, 350);
     </script>
 </body>
 </html>
