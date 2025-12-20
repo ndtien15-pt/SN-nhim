@@ -3,126 +3,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gửi Nhím - SN 2025</title>
+    <title>Gửi Nhím - Một người đặc biệt</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        /* CSS ĐÃ FIX LỖI TRẮNG TRANG */
-        body { background: #fff0f3; margin: 0; font-family: 'Quicksand', sans-serif; overflow-x: hidden; }
-        
+        :root {
+            --primary-pink: #ff4d6d;
+            --soft-pink: #ffc2d1;
+            --bg-pink: #fff0f3;
+        }
+
+        body { 
+            background: var(--bg-pink); 
+            margin: 0; 
+            font-family: 'Quicksand', sans-serif; 
+            overflow: hidden; /* Không cho cuộn trang */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Intro */
         #intro {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #ffc2d1; /* Nền hồng này sẽ hiện ngay lập tức */
+            background: var(--soft-pink);
             display: flex; justify-content: center; align-items: center;
-            z-index: 9999; transition: opacity 1s ease;
+            z-index: 9999; transition: opacity 1s ease; text-align: center;
         }
-
-        .intro-content { text-align: center; color: white; width: 100%; }
-        
-        /* Hiệu ứng chữ chạy đã fix */
+        .intro-content { color: white; }
         .typing {
-            display: block;
-            width: 0; white-space: nowrap; overflow: hidden;
-            border-right: 3px solid white; margin: 0 auto;
-            animation: typing 3.5s steps(30, end) forwards;
             font-family: 'Dancing Script', cursive; font-size: 2.5rem;
+            width: 0; white-space: nowrap; overflow: hidden;
+            border-right: 3px solid; margin: 0 auto;
+            animation: typing 3s steps(30, end) forwards;
         }
         @keyframes typing { from { width: 0; } to { width: 100%; } }
-
+        
         #start-btn {
-            padding: 15px 30px; font-size: 1.2rem; background: white;
-            color: #ff4d6d; border: none; border-radius: 50px;
-            cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-top: 30px;
+            margin-top: 30px; padding: 15px 40px; font-size: 1.2rem;
+            background: white; color: var(--primary-pink); border: none;
+            border-radius: 50px; cursor: pointer; font-weight: bold;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
-        .gallery { display: flex; flex-wrap: wrap; justify-content: center; padding: 50px 20px; }
-
-        .polaroid {
-            background: white; padding: 10px 10px 25px 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin: 15px;
-            border: 1px solid #eee; text-align: center;
+        /* Gallery - Chiếu từng tấm */
+        #gallery-section {
+            display: none; width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer; position: relative;
         }
-        .polaroid img { width: 200px; height: 200px; object-fit: cover; display: block; }
-        .polaroid .caption { font-family: 'Dancing Script', cursive; margin-top: 10px; color: #444; }
 
-        .heart {
-            position: fixed; top: -10%; color: #ff4d6d;
-            user-select: none; pointer-events: none; z-index: 999;
-            animation: fall linear forwards;
+        .polaroid-wrapper {
+            background: white; padding: 15px 15px 60px 15px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            border-radius: 5px; transform: scale(0.9);
+            opacity: 0; transition: all 0.6s ease;
+            position: absolute; text-align: center;
         }
-        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+
+        .polaroid-wrapper.active { opacity: 1; transform: scale(1); }
+
+        .polaroid-wrapper img {
+            width: 300px; height: 350px; object-fit: cover;
+            border-radius: 3px; pointer-events: none;
+        }
+
+        .polaroid-wrapper .caption {
+            font-family: 'Dancing Script', cursive;
+            margin-top: 15px; font-size: 1.5rem; color: #444;
+        }
+
+        .counter {
+            position: absolute; bottom: 30px; color: var(--primary-pink);
+            font-weight: bold; font-size: 1.1rem;
+        }
+
+        /* Lời nhắn cuối cùng */
+        #letter-section {
+            display: none; width: 90%; max-width: 500px;
+            animation: fadeInUp 1.5s ease;
+        }
 
         .letter-paper {
-            background: #fff; padding: 40px; max-width: 600px; margin: 50px auto;
-            position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.1); line-height: 1.8;
+            background: white; padding: 40px; border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); line-height: 2;
+            position: relative;
         }
-        .letter-paper::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: repeating-linear-gradient(white, white 30px, #e5e5e5 31px); z-index: -1;
+        .letter-paper h2 { font-family: 'Dancing Script'; color: var(--primary-pink); }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
         }
+
+        /* Hiệu ứng lung linh */
+        .heart { position: fixed; top: -10%; color: var(--primary-pink); z-index: 100; animation: fall linear forwards; }
+        .sparkle { position: fixed; background: white; border-radius: 50%; animation: blink 2s infinite; }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+        @keyframes blink { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+
+        /* Hướng dẫn click */
+        .hint { position: absolute; top: 20px; color: #888; font-size: 0.9rem; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
     </style>
 </head>
 <body>
 
     <div id="intro">
         <div class="intro-content">
-            <h2 class="typing">Gửi một người đặc biệt...</h2>
-            <p>Tớ có một món quà nhỏ dành cho cậu.</p>
-            <button id="start-btn">Khám phá ngay ❤️</button>
+            <h2 class="typing">Gửi Nhím - Món quà bí mật...</h2>
+            <button id="start-btn">Mở ra ngay ❤️</button>
         </div>
     </div>
 
-    <div id="main-content" style="display: none;">
-        <header style="text-align: center; padding-top: 50px;">
-            <h1 style="font-family: 'Dancing Script', cursive; color: #ff4d6d; font-size: 3rem;">Happy Birthday, Nhím!</h1>
-        </header>
+    <div style="position: absolute; left: -9999px;">
+        <iframe id="yt-player" width="100" height="100" src="https://www.youtube.com/embed/VIDEO_ID?enablejsapi=1" frameborder="0"></iframe>
+    </div>
 
-        <main class="gallery" id="photo-gallery"></main>
+    <div id="gallery-section">
+        <div class="hint">Chạm vào màn hình để xem tiếp nhé...</div>
+        <div id="photo-container"></div>
+        <div class="counter"><span id="current-num">1</span> / 32</div>
+    </div>
 
+    <div id="letter-section">
         <div class="letter-paper">
-            <h2>Gửi cậu,</h2>
-            <p>Anh yêu em rất nhiều!</p>
-            <p style="text-align: right; font-family: 'Dancing Script'; font-size: 1.5rem; color: #ff4d6d;">Tiến</p>
+            <h2>Gửi Nhím của anh,</h2>
+            <p>
+                Vậy là chúng ta đã cùng lướt qua 32 khoảnh khắc tuyệt vời nhất. 
+                Anh muốn nói rằng, từng giây phút bên em đều là những kỷ niệm vô giá. 
+                Chúc mừng sinh nhật cô gái xinh đẹp nhất của anh! Anh yêu em rất nhiều ❤️
+            </p>
+            <p style="text-align: right; font-family: 'Dancing Script'; font-size: 1.8rem; color: var(--primary-pink);">Tiến</p>
         </div>
     </div>
 
     <script>
         const startBtn = document.getElementById('start-btn');
         const intro = document.getElementById('intro');
-        const mainContent = document.getElementById('main-content');
-        const gallery = document.getElementById('photo-gallery');
+        const gallerySection = document.getElementById('gallery-section');
+        const letterSection = document.getElementById('letter-section');
+        const photoContainer = document.getElementById('photo-container');
+        const currentNumDisplay = document.getElementById('current-num');
 
+        let currentIndex = 1;
+        const totalPhotos = 32;
+
+        // Bắt đầu
         startBtn.addEventListener('click', () => {
             intro.style.opacity = '0';
             setTimeout(() => {
                 intro.style.display = 'none';
-                mainContent.style.display = 'block';
-                
-                // CHỈ LOAD ẢNH SAU KHI NHẤN NÚT (Để tránh lỗi trắng trang)
-                for (let i = 1; i <= 32; i++) {
-                    const polaroid = document.createElement('div');
-                    polaroid.classList.add('polaroid');
-                    const randomRotate = Math.random() * 10 - 5;
-                    polaroid.style.transform = `rotate(${randomRotate}deg)`;
-                    polaroid.innerHTML = `
-                        <img src="img/${i}.jpg" alt="Memory ${i}" onerror="this.src='https://via.placeholder.com/200?text=Anh+${i}'">
-                        <div class="caption">Memory #${i}</div>
-                    `;
-                    gallery.appendChild(polaroid);
-                }
+                gallerySection.style.display = 'flex';
+                // Phát nhạc
+                const player = document.getElementById('yt-player');
+                player.src += "&autoplay=1";
+                showPhoto(currentIndex);
             }, 1000);
         });
 
-        // Tim bay luôn chạy
-        setInterval(() => {
+        // Tạo khung ảnh Polaroid
+        function showPhoto(index) {
+            photoContainer.innerHTML = '';
+            const wrapper = document.createElement('div');
+            wrapper.classList.add('polaroid-wrapper');
+            wrapper.innerHTML = `
+                <img src="img/${index}.jpg" onerror="this.src='https://via.placeholder.com/300x350?text=Memory+${index}'">
+                <div class="caption">Memory #${index}</div>
+            `;
+            photoContainer.appendChild(wrapper);
+            
+            // Hiệu ứng hiện hình
+            setTimeout(() => wrapper.classList.add('active'), 50);
+        }
+
+        // Click để chuyển ảnh
+        gallerySection.addEventListener('click', () => {
+            if (currentIndex < totalPhotos) {
+                currentIndex++;
+                currentNumDisplay.innerText = currentIndex;
+                showPhoto(currentIndex);
+            } else {
+                // Hết ảnh thì hiện lời nhắn
+                gallerySection.style.display = 'none';
+                letterSection.style.display = 'block';
+            }
+        });
+
+        // Hiệu ứng Tim bay + Lấp lánh
+        function createEffect() {
             const heart = document.createElement('div');
             heart.classList.add('heart');
             heart.innerHTML = '❤️';
             heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.fontSize = (Math.random() * 10 + 15) + 'px';
-            heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+            heart.style.animationDuration = Math.random() * 3 + 2 + 's';
             document.body.appendChild(heart);
             setTimeout(() => heart.remove(), 5000);
-        }, 300);
+
+            const sparkle = document.createElement('div');
+            sparkle.classList.add('sparkle');
+            const size = Math.random() * 5 + 2 + 'px';
+            sparkle.style.width = size; sparkle.style.height = size;
+            sparkle.style.left = Math.random() * 100 + 'vw';
+            sparkle.style.top = Math.random() * 100 + 'vh';
+            document.body.appendChild(sparkle);
+            setTimeout(() => sparkle.remove(), 2000);
+        }
+        setInterval(createEffect, 300);
     </script>
 </body>
 </html>
