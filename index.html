@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gửi Nhím - Một người đặc biệt</title>
+    <title>Gửi Nhím - Birthday 2025</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -16,11 +16,12 @@
             background: var(--bg-pink); 
             margin: 0; 
             font-family: 'Quicksand', sans-serif; 
-            overflow: hidden; /* Không cho cuộn trang */
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
         }
 
         /* Intro */
@@ -30,9 +31,9 @@
             display: flex; justify-content: center; align-items: center;
             z-index: 9999; transition: opacity 1s ease; text-align: center;
         }
-        .intro-content { color: white; }
+        .intro-content { color: white; padding: 20px; }
         .typing {
-            font-family: 'Dancing Script', cursive; font-size: 2.5rem;
+            font-family: 'Dancing Script', cursive; font-size: 2.2rem;
             width: 0; white-space: nowrap; overflow: hidden;
             border-right: 3px solid; margin: 0 auto;
             animation: typing 3s steps(30, end) forwards;
@@ -40,71 +41,84 @@
         @keyframes typing { from { width: 0; } to { width: 100%; } }
         
         #start-btn {
-            margin-top: 30px; padding: 15px 40px; font-size: 1.2rem;
+            margin-top: 30px; padding: 15px 40px; font-size: 1.1rem;
             background: white; color: var(--primary-pink); border: none;
             border-radius: 50px; cursor: pointer; font-weight: bold;
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
-        /* Gallery - Chiếu từng tấm */
+        /* Gallery - Căn giữa chuẩn */
         #gallery-section {
-            display: none; width: 100%; height: 100%;
-            display: flex; justify-content: center; align-items: center;
-            cursor: pointer; position: relative;
+            display: none; 
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        #photo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 70%;
+            position: relative;
         }
 
         .polaroid-wrapper {
-            background: white; padding: 15px 15px 60px 15px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-            border-radius: 5px; transform: scale(0.9);
-            opacity: 0; transition: all 0.6s ease;
-            position: absolute; text-align: center;
+            background: white; padding: 10px 10px 50px 10px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            border-radius: 5px; 
+            transition: all 0.5s ease;
+            max-width: 85%;
         }
 
-        .polaroid-wrapper.active { opacity: 1; transform: scale(1); }
-
         .polaroid-wrapper img {
-            width: 300px; height: 350px; object-fit: cover;
-            border-radius: 3px; pointer-events: none;
+            width: 100%;
+            max-width: 300px; /* Chỉnh kích thước ảnh vừa phải cho mobile */
+            height: 350px; 
+            object-fit: cover;
+            border-radius: 2px;
+            pointer-events: none;
         }
 
         .polaroid-wrapper .caption {
             font-family: 'Dancing Script', cursive;
-            margin-top: 15px; font-size: 1.5rem; color: #444;
+            margin-top: 15px; font-size: 1.4rem; color: #444;
         }
 
         .counter {
-            position: absolute; bottom: 30px; color: var(--primary-pink);
-            font-weight: bold; font-size: 1.1rem;
+            margin-top: 20px; color: var(--primary-pink);
+            font-weight: bold; font-size: 1rem;
+            background: white; padding: 5px 15px; border-radius: 20px;
         }
 
         /* Lời nhắn cuối cùng */
         #letter-section {
-            display: none; width: 90%; max-width: 500px;
-            animation: fadeInUp 1.5s ease;
+            display: none; 
+            width: 90%; 
+            max-width: 500px;
+            z-index: 10;
         }
 
         .letter-paper {
-            background: white; padding: 40px; border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); line-height: 2;
+            background: white; padding: 30px; border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); line-height: 1.8;
             position: relative;
         }
-        .letter-paper h2 { font-family: 'Dancing Script'; color: var(--primary-pink); }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .letter-paper h2 { font-family: 'Dancing Script'; color: var(--primary-pink); margin-top: 0; }
 
         /* Hiệu ứng lung linh */
         .heart { position: fixed; top: -10%; color: var(--primary-pink); z-index: 100; animation: fall linear forwards; }
-        .sparkle { position: fixed; background: white; border-radius: 50%; animation: blink 2s infinite; }
+        .sparkle { position: fixed; background: white; border-radius: 50%; animation: blink 2s infinite; z-index: 1; }
         @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
-        @keyframes blink { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+        @keyframes blink { 0%, 100% { opacity: 0; } 50% { opacity: 0.8; } }
 
-        /* Hướng dẫn click */
-        .hint { position: absolute; top: 20px; color: #888; font-size: 0.9rem; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+        .hint { position: absolute; top: 15%; color: var(--primary-pink); font-size: 0.9rem; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -117,7 +131,9 @@
     </div>
 
     <div style="position: absolute; left: -9999px;">
-        <iframe id="yt-player" width="100" height="100" src="https://www.youtube.com/embed/VIDEO_ID?enablejsapi=1" frameborder="0"></iframe>
+        <iframe id="yt-player" width="100" height="100" 
+            src="https://www.youtube.com/embed/0_fK-oK8N9s?enablejsapi=1&mute=0" 
+            allow="autoplay; encrypted-media" frameborder="0"></iframe>
     </div>
 
     <div id="gallery-section">
@@ -129,12 +145,14 @@
     <div id="letter-section">
         <div class="letter-paper">
             <h2>Gửi Nhím của anh,</h2>
-            <p>
-                Vậy là chúng ta đã cùng lướt qua 32 khoảnh khắc tuyệt vời nhất. 
-                Anh muốn nói rằng, từng giây phút bên em đều là những kỷ niệm vô giá. 
-                Chúc mừng sinh nhật cô gái xinh đẹp nhất của anh! Anh yêu em rất nhiều ❤️
-            </p>
-            <p style="text-align: right; font-family: 'Dancing Script'; font-size: 1.8rem; color: var(--primary-pink);">Tiến</p>
+            <div style="max-height: 300px; overflow-y: auto;">
+                <p>
+                    Chúc mừng sinh nhật em! 32 tấm ảnh là 32 khoảnh khắc anh trân trọng nhất. 
+                    Cảm ơn em đã luôn ở bên cạnh anh. Chúc em tuổi mới luôn rạng rỡ và hạnh phúc như chính nụ cười của em vậy.
+                    Yêu em rất nhiều ❤️
+                </p>
+            </div>
+            <p style="text-align: right; font-family: 'Dancing Script'; font-size: 1.6rem; color: var(--primary-pink); margin-bottom: 0;">Tiến của em</p>
         </div>
     </div>
 
@@ -149,67 +167,68 @@
         let currentIndex = 1;
         const totalPhotos = 32;
 
-        // Bắt đầu
         startBtn.addEventListener('click', () => {
             intro.style.opacity = '0';
             setTimeout(() => {
                 intro.style.display = 'none';
                 gallerySection.style.display = 'flex';
-                // Phát nhạc
+                
+                // Kích hoạt nhạc (Phát sau khi có tương tác click)
                 const player = document.getElementById('yt-player');
                 player.src += "&autoplay=1";
+                
                 showPhoto(currentIndex);
             }, 1000);
         });
 
-        // Tạo khung ảnh Polaroid
         function showPhoto(index) {
             photoContainer.innerHTML = '';
             const wrapper = document.createElement('div');
             wrapper.classList.add('polaroid-wrapper');
+            // Thêm hiệu ứng xoay ngẫu nhiên nhẹ cho lung linh
+            const rotate = Math.random() * 6 - 3;
+            wrapper.style.transform = `rotate(${rotate}deg)`;
+            
             wrapper.innerHTML = `
                 <img src="img/${index}.jpg" onerror="this.src='https://via.placeholder.com/300x350?text=Memory+${index}'">
                 <div class="caption">Memory #${index}</div>
             `;
             photoContainer.appendChild(wrapper);
-            
-            // Hiệu ứng hiện hình
-            setTimeout(() => wrapper.classList.add('active'), 50);
         }
 
-        // Click để chuyển ảnh
         gallerySection.addEventListener('click', () => {
             if (currentIndex < totalPhotos) {
                 currentIndex++;
                 currentNumDisplay.innerText = currentIndex;
                 showPhoto(currentIndex);
             } else {
-                // Hết ảnh thì hiện lời nhắn
                 gallerySection.style.display = 'none';
                 letterSection.style.display = 'block';
+                document.body.style.overflow = 'auto'; // Cho phép cuộn để đọc thư nếu dài
             }
         });
 
-        // Hiệu ứng Tim bay + Lấp lánh
+        // Hiệu ứng Tim bay + Hạt lấp lánh
         function createEffect() {
             const heart = document.createElement('div');
             heart.classList.add('heart');
             heart.innerHTML = '❤️';
             heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.fontSize = Math.random() * 15 + 10 + 'px';
             heart.style.animationDuration = Math.random() * 3 + 2 + 's';
             document.body.appendChild(heart);
             setTimeout(() => heart.remove(), 5000);
 
             const sparkle = document.createElement('div');
             sparkle.classList.add('sparkle');
-            const size = Math.random() * 5 + 2 + 'px';
+            const size = Math.random() * 4 + 2 + 'px';
             sparkle.style.width = size; sparkle.style.height = size;
             sparkle.style.left = Math.random() * 100 + 'vw';
             sparkle.style.top = Math.random() * 100 + 'vh';
             document.body.appendChild(sparkle);
             setTimeout(() => sparkle.remove(), 2000);
         }
-        setInterval(createEffect, 300);
+        setInterval(createEffect, 250);
     </script>
 </body>
 </html>
