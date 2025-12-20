@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gửi Nhím - SN 2025</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* CSS ĐÃ FIX LỖI TRẮNG TRANG */
+        body { background: #fff0f3; margin: 0; font-family: 'Quicksand', sans-serif; overflow-x: hidden; }
+        
+        #intro {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #ffc2d1; /* Nền hồng này sẽ hiện ngay lập tức */
+            display: flex; justify-content: center; align-items: center;
+            z-index: 9999; transition: opacity 1s ease;
+        }
+
+        .intro-content { text-align: center; color: white; width: 100%; }
+        
+        /* Hiệu ứng chữ chạy đã fix */
+        .typing {
+            display: block;
+            width: 0; white-space: nowrap; overflow: hidden;
+            border-right: 3px solid white; margin: 0 auto;
+            animation: typing 3.5s steps(30, end) forwards;
+            font-family: 'Dancing Script', cursive; font-size: 2.5rem;
+        }
+        @keyframes typing { from { width: 0; } to { width: 100%; } }
+
+        #start-btn {
+            padding: 15px 30px; font-size: 1.2rem; background: white;
+            color: #ff4d6d; border: none; border-radius: 50px;
+            cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-top: 30px;
+        }
+
+        .gallery { display: flex; flex-wrap: wrap; justify-content: center; padding: 50px 20px; }
+
+        .polaroid {
+            background: white; padding: 10px 10px 25px 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin: 15px;
+            border: 1px solid #eee; text-align: center;
+        }
+        .polaroid img { width: 200px; height: 200px; object-fit: cover; display: block; }
+        .polaroid .caption { font-family: 'Dancing Script', cursive; margin-top: 10px; color: #444; }
+
+        .heart {
+            position: fixed; top: -10%; color: #ff4d6d;
+            user-select: none; pointer-events: none; z-index: 999;
+            animation: fall linear forwards;
+        }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+
+        .letter-paper {
+            background: #fff; padding: 40px; max-width: 600px; margin: 50px auto;
+            position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.1); line-height: 1.8;
+        }
+        .letter-paper::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: repeating-linear-gradient(white, white 30px, #e5e5e5 31px); z-index: -1;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="intro">
+        <div class="intro-content">
+            <h2 class="typing">Gửi một người đặc biệt...</h2>
+            <p>Tớ có một món quà nhỏ dành cho cậu.</p>
+            <button id="start-btn">Khám phá ngay ❤️</button>
+        </div>
+    </div>
+
+    <div id="main-content" style="display: none;">
+        <header style="text-align: center; padding-top: 50px;">
+            <h1 style="font-family: 'Dancing Script', cursive; color: #ff4d6d; font-size: 3rem;">Happy Birthday, Nhím!</h1>
+        </header>
+
+        <main class="gallery" id="photo-gallery"></main>
+
+        <div class="letter-paper">
+            <h2>Gửi cậu,</h2>
+            <p>Anh yêu em rất nhiều!</p>
+            <p style="text-align: right; font-family: 'Dancing Script'; font-size: 1.5rem; color: #ff4d6d;">Tiến</p>
+        </div>
+    </div>
+
+    <script>
+        const startBtn = document.getElementById('start-btn');
+        const intro = document.getElementById('intro');
+        const mainContent = document.getElementById('main-content');
+        const gallery = document.getElementById('photo-gallery');
+
+        startBtn.addEventListener('click', () => {
+            intro.style.opacity = '0';
+            setTimeout(() => {
+                intro.style.display = 'none';
+                mainContent.style.display = 'block';
+                
+                // CHỈ LOAD ẢNH SAU KHI NHẤN NÚT (Để tránh lỗi trắng trang)
+                for (let i = 1; i <= 32; i++) {
+                    const polaroid = document.createElement('div');
+                    polaroid.classList.add('polaroid');
+                    const randomRotate = Math.random() * 10 - 5;
+                    polaroid.style.transform = `rotate(${randomRotate}deg)`;
+                    polaroid.innerHTML = `
+                        <img src="img/${i}.jpg" alt="Memory ${i}" onerror="this.src='https://via.placeholder.com/200?text=Anh+${i}'">
+                        <div class="caption">Memory #${i}</div>
+                    `;
+                    gallery.appendChild(polaroid);
+                }
+            }, 1000);
+        });
+
+        // Tim bay luôn chạy
+        setInterval(() => {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.fontSize = (Math.random() * 10 + 15) + 'px';
+            heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
+        }, 300);
+    </script>
+</body>
+</html>
