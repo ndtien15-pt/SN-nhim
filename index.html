@@ -89,6 +89,8 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
             cursor: pointer;
+            /* Quan trọng để tính toán góc */
+            transform-origin: center center;
         }
 
         .polaroid img { 
@@ -123,7 +125,23 @@
 
         #letter.show .letter-content { transform: scale(1); opacity: 1; }
 
-        /* Hiệu ứng Tim */
+        /* --- CSS MỚI CHO PHÁO HOA --- */
+        .particle {
+            position: fixed;
+            pointer-events: none;
+            width: 8px; /* Hạt to hơn chút */
+            height: 8px;
+            border-radius: 50%;
+            z-index: 9999;
+            animation: burst 0.8s ease-out forwards;
+        }
+
+        @keyframes burst {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+        }
+
+        /* Hiệu ứng Tim bay nền */
         .heart { 
             position: fixed; top: -10%; z-index: 1; 
             animation: fall linear forwards; pointer-events: none; 
@@ -131,10 +149,7 @@
 
         @keyframes fall {
             0% { transform: translateY(0) rotate(0deg) translateX(0); }
-            25% { transform: translateY(25vh) rotate(90deg) translateX(15px); }
-            50% { transform: translateY(50vh) rotate(180deg) translateX(-15px); }
-            75% { transform: translateY(75vh) rotate(270deg) translateX(15px); }
-            100% { transform: translateY(105vh) rotate(360deg) translateX(0); }
+            100% { transform: translateY(105vh) rotate(360deg) translateX(15px); }
         }
     </style>
 </head>
@@ -144,9 +159,11 @@
         <h2 style="font-family: 'Dancing Script'; font-size: 3.2rem; margin-bottom: 10px;">Gửi Nhím... ❤️</h2>
         <div class="intro-text">
             <p style="animation-delay: 0.5s">Chào cô bé của anh,</p>
-            <p style="animation-delay: 1.5s">Anh có một bất ngờ nhỏ dành cho em đây...</p>
-            <p style="animation-delay: 2.5s">Mỗi tấm ảnh là một mảnh ký niệm chúng mình đã đi qua.</p>
-            <p style="animation-delay: 3.5s">Cùng anh nhìn lại nhé? ✨</p>
+            <p style="animation-delay: 1.5s">Hôm nay là một ngày thật sự ý nghĩa..</p>
+            <p style="animation-delay: 2.5s">Anh có một bất ngờ nhỏ dành cho em đây</p>
+            <p style="animation-delay: 4s">Anh đã tự tay chuẩn bị món quà nhỏ này để lưu giữ những kỷ niệm của em trong suốt thời gian qua.</p>
+            <p style="animation-delay: 5.5s">À vẫn rấc cinloi vì đã cap ảnh trên ig của em nha hhh.</p>
+            <p style="animation-delay: 6.5s">Nào bây giờ thì cùng anh nhìn lại nhé? ✨</p>
         </div>
         <button id="start-btn">Bắt đầu hành trình</button>
     </div>
@@ -158,17 +175,16 @@
     <div class="wrapper">
         <div id="main-app">
             <div class="gallery-content">
-                <div class="photo-stack" id="stack">
-                    </div>
+                <div class="photo-stack" id="stack"></div>
                 <div class="counter"><span id="cur">1</span> / 32</div>
             </div>
         </div>
 
         <div id="letter">
             <div class="letter-content">
-                <h2 style="font-family: 'Dancing Script'; color: var(--pink); font-size: 2.5rem;">Gửi Nhím thương yêu,</h2>
-                <p>Chúc mừng sinh nhật cô gái tuyệt vời nhất của anh! Hy vọng món quà nhỏ này sẽ làm em cười thật tươi.</p>
-                <p>Cảm ơn em đã xuất hiện và đồng hành cùng anh. Anh yêu em rất nhiều! ❤️</p>
+                <h2 style="font-family: 'Dancing Script'; color: var(--pink); font-size: 2.5rem;">Gửi Nhím dyeu nhất tgioi,</h2>
+                <p>Chúc mừng sinh nhật cô gái tuyệt vời của anh! Hy vọng món quà nhỏ này sẽ làm em cười thật tươi.</p>
+                <p>Cảm ơn em đã đã đồng hành cùng anh. Anh yêu em rất nhiều! ❤️</p>
                 <p style="text-align: right; font-family: 'Dancing Script'; font-size: 2.2rem; color: var(--pink); margin-top: 20px;">Tiến</p>
                 <button onclick="location.reload()" style="width:100%; border:none; background:#eee; padding:10px; border-radius:10px; margin-top:20px; color:#666">Xem lại từ đầu</button>
             </div>
@@ -191,17 +207,41 @@
             }, 1000);
         };
 
+        // Hàm tạo pháo hoa tại tọa độ x, y
+        function createFirework(x, y) {
+            const colors = ['#ff4d6d', '#ffccd5', '#c9184a', '#ffbd00', '#ffffff'];
+            const particleCount = 20; // Số lượng hạt mỗi góc
+            for (let i = 0; i < particleCount; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                p.style.left = x + 'px';
+                p.style.top = y + 'px';
+                
+                // Tính toán hướng bay ngẫu nhiên
+                const angle = Math.random() * Math.PI * 2;
+                const dist = Math.random() * 100 + 20; // Khoảng cách bay
+                p.style.setProperty('--tx', `${Math.cos(angle) * dist}px`);
+                p.style.setProperty('--ty', `${Math.sin(angle) * dist}px`);
+                
+                document.body.appendChild(p);
+                // Xóa hạt sau khi bay xong để nhẹ máy
+                setTimeout(() => p.remove(), 800);
+            }
+        }
+
         function renderPhoto() {
             stack.innerHTML = '';
-            // Tạo hiệu ứng layer bóng mờ phía sau
+            // Tạo các lớp ảnh nền
             for(let i=0; i<3; i++) {
                 const layer = document.createElement('div');
                 layer.className = 'polaroid';
-                layer.style.transform = `rotate(${(Math.random() * 10 - 5)}deg) translate(${(Math.random() * 10 - 5)}px, ${(Math.random() * 10 - 5)}px)`;
+                layer.style.transform = `rotate(${(Math.random() * 8 - 4)}deg) translate(${(Math.random() * 6 - 3)}px, ${(Math.random() * 6 - 3)}px)`;
                 layer.style.zIndex = 1;
                 stack.appendChild(layer);
             }
 
+            // Tạo ảnh chính
             const activePhoto = document.createElement('div');
             activePhoto.className = 'polaroid';
             activePhoto.style.zIndex = 10;
@@ -210,23 +250,46 @@
                 <div class="caption">Memory #${current}</div>
             `;
             
-            // Hiệu ứng xuất hiện
             activePhoto.style.transform = 'scale(0.5) translateY(50px)';
             activePhoto.style.opacity = '0';
             stack.appendChild(activePhoto);
 
             setTimeout(() => {
-                activePhoto.style.transform = 'scale(1) rotate(' + (Math.random() * 6 - 3) + 'deg)';
+                // Xoay nhẹ ảnh chính ngẫu nhiên
+                activePhoto.style.transform = 'scale(1) rotate(' + (Math.random() * 4 - 2) + 'deg)';
                 activePhoto.style.opacity = '1';
             }, 50);
 
             document.getElementById('cur').innerText = current;
         }
 
+        // Xử lý khi chạm vào ngăn xếp ảnh
         stack.onclick = () => {
+            const active = stack.querySelector('.polaroid:last-child');
+            if (!active) return;
+
+            // Lấy tọa độ chính xác của tấm ảnh đang hiển thị
+            const rect = active.getBoundingClientRect();
+            
+            // Tạo mảng chứa tọa độ 4 góc
+            const corners = [
+                {x: rect.left, y: rect.top},      // Góc trên trái
+                {x: rect.right, y: rect.top},     // Góc trên phải
+                {x: rect.left, y: rect.bottom},   // Góc dưới trái
+                {x: rect.right, y: rect.bottom}   // Góc dưới phải
+            ];
+
+            // Bắn pháo hoa tại 4 góc với độ trễ siêu nhỏ để tự nhiên hơn
+            corners.forEach((corner, index) => {
+                setTimeout(() => {
+                    createFirework(corner.x, corner.y);
+                }, index * 30); // Mỗi góc cách nhau 30ms
+            });
+
+            // Chuyển ảnh
             if (current < photosCount) {
-                const active = stack.querySelector('.polaroid:last-child');
-                active.style.transform = 'translateX(200%) rotate(30deg)';
+                // Hiệu ứng bay đi của ảnh cũ
+                active.style.transform = 'translateX(150%) rotate(30deg) scale(0.8)';
                 active.style.opacity = '0';
                 
                 current++;
@@ -244,12 +307,14 @@
                 l.style.display = 'flex';
                 setTimeout(() => {
                     l.classList.add('show');
-                    createConfetti(); // Bắn tim tung tóe khi mở thư
+                    // Bắn pháo hoa mừng khi hiện thư
+                    createFirework(window.innerWidth/2, window.innerHeight/2);
+                    setTimeout(() => createFirework(window.innerWidth/2, window.innerHeight/3), 300);
                 }, 100);
             }, 500);
         }
 
-        // Tạo tim bay ngẫu nhiên
+        // Tạo tim bay nền ngẫu nhiên
         setInterval(() => {
             const h = document.createElement('div');
             h.className = 'heart';
@@ -260,30 +325,7 @@
             h.style.opacity = Math.random();
             document.body.appendChild(h);
             setTimeout(() => h.remove(), 6000);
-        }, 400);
-
-        function createConfetti() {
-            for(let i=0; i<50; i++) {
-                setTimeout(() => {
-                    const h = document.createElement('div');
-                    h.className = 'heart';
-                    h.innerHTML = '❤️';
-                    h.style.left = '50vw';
-                    h.style.top = '50vh';
-                    h.style.fontSize = (Math.random() * 20 + 10) + 'px';
-                    h.style.transition = 'all 2s ease-out';
-                    document.body.appendChild(h);
-                    
-                    const angle = Math.random() * Math.PI * 2;
-                    const dist = Math.random() * 200 + 50;
-                    setTimeout(() => {
-                        h.style.transform = `translate(${Math.cos(angle)*dist}px, ${Math.sin(angle)*dist}px) rotate(360deg)`;
-                        h.style.opacity = '0';
-                    }, 50);
-                    setTimeout(() => h.remove(), 2000);
-                }, i * 20);
-            }
-        }
+        }, 450);
     </script>
 </body>
 </html>
