@@ -15,32 +15,46 @@
             overflow: hidden; 
         }
 
-        /* Container tổng để căn giữa mọi thứ */
         .wrapper {
             display: flex; justify-content: center; align-items: center;
             width: 100%; height: 100%; position: relative;
         }
 
-        /* Intro */
+        /* Intro - Chỉnh lại để chứa được nhiều chữ hơn */
         #intro {
             position: fixed; inset: 0; background: #ffc2d1;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             z-index: 1000; transition: opacity 0.8s; color: white; text-align: center;
+            padding: 20px;
         }
+        .intro-text {
+            max-width: 320px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .intro-text p {
+            margin: 10px 0;
+            font-size: 1.05rem;
+            animation: fadeInText 1s ease forwards;
+        }
+
+        @keyframes fadeInText {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         #start-btn {
-            margin-top: 20px; padding: 15px 40px; border-radius: 50px; border: none;
+            padding: 15px 40px; border-radius: 50px; border: none;
             background: white; color: var(--pink); font-weight: bold; cursor: pointer;
             box-shadow: 0 10px 20px rgba(0,0,0,0.1); font-size: 1.1rem;
         }
 
-        /* Gallery - Khóa vào giữa */
+        /* Gallery */
         #main-app { display: none; width: 100%; height: 100%; }
-        
         .gallery-content {
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             width: 100%; height: 100%; position: relative;
         }
-
         .polaroid {
             background: white; padding: 10px 10px 50px 10px; border-radius: 5px;
             box-shadow: 0 15px 45px rgba(255, 77, 109, 0.25);
@@ -49,7 +63,6 @@
         }
         .polaroid img { width: 100%; height: 380px; object-fit: cover; border-radius: 2px; }
         .caption { font-family: 'Dancing Script', cursive; font-size: 1.6rem; text-align: center; margin-top: 15px; color: #444; }
-
         .counter { margin-top: 25px; color: var(--pink); font-weight: bold; background: white; padding: 6px 20px; border-radius: 20px; z-index: 10; }
         .hint { position: absolute; top: 10%; width: 100%; text-align: center; color: var(--pink); animation: pulse 2s infinite; font-weight: 600; }
         @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
@@ -73,8 +86,16 @@
 <body>
 
     <div id="intro">
-        <h2 style="font-family: 'Dancing Script'; font-size: 2.8rem;">Gửi Nhím... ❤️</h2>
-        <p>Tớ có một điều bất ngờ dành cho cậu</p>
+        <h2 style="font-family: 'Dancing Script'; font-size: 2.8rem; margin-bottom: 10px;">Gửi Nhím... ❤️</h2>
+        
+        <div class="intro-text">
+            <p>Hôm nay là một ngày thật sự ý nghĩa...</p>
+            <p>Anh đã tự tay chuẩn bị món quà nhỏ này để lưu giữ những kỷ niệm của em trong suốt thời gian qua.</p>
+            <p>Mỗi tấm ảnh là một khoảnh khắc đáng nhớ của em.</p>
+            <p>À vẫn rấc cinloi vì di cap ảnh trên ig của em nha hhh.</p>
+            <p>Giờ đã Sẵn sàng để cùng anh xem lại chưa nào?</p>
+        </div>
+
         <button id="start-btn">Mở quà ngay</button>
     </div>
 
@@ -111,7 +132,6 @@
 
         startBtn.onclick = () => {
             document.getElementById('intro').style.opacity = '0';
-            // PHÁT NHẠC MP3 KHI CLICK
             music.play().catch(e => console.log("Lỗi phát nhạc:", e));
             
             setTimeout(() => {
@@ -145,7 +165,6 @@
             }
         };
 
-        // Hiệu ứng tim bay
         setInterval(() => {
             const h = document.createElement('div');
             h.className = 'heart'; h.innerHTML = '❤️';
