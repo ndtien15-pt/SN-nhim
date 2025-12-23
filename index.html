@@ -89,7 +89,6 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
             cursor: pointer;
-            /* Quan trọng để tính toán góc */
             transform-origin: center center;
         }
 
@@ -125,11 +124,11 @@
 
         #letter.show .letter-content { transform: scale(1); opacity: 1; }
 
-        /* --- CSS MỚI CHO PHÁO HOA --- */
+        /* CSS PHÁO HOA */
         .particle {
             position: fixed;
             pointer-events: none;
-            width: 8px; /* Hạt to hơn chút */
+            width: 8px;
             height: 8px;
             border-radius: 50%;
             z-index: 9999;
@@ -176,7 +175,7 @@
         <div id="main-app">
             <div class="gallery-content">
                 <div class="photo-stack" id="stack"></div>
-                <div class="counter"><span id="cur">1</span> / 32</div>
+                <div class="counter"><span id="cur">1</span> / 23</div>
             </div>
         </div>
 
@@ -192,7 +191,7 @@
     </div>
 
     <script>
-        const photosCount = 32;
+        const photosCount = 23; // Đã đổi thành 23
         let current = 1;
         const stack = document.getElementById('stack');
         const music = document.getElementById('bg-music');
@@ -207,32 +206,26 @@
             }, 1000);
         };
 
-        // Hàm tạo pháo hoa tại tọa độ x, y
         function createFirework(x, y) {
             const colors = ['#ff4d6d', '#ffccd5', '#c9184a', '#ffbd00', '#ffffff'];
-            const particleCount = 20; // Số lượng hạt mỗi góc
+            const particleCount = 20;
             for (let i = 0; i < particleCount; i++) {
                 const p = document.createElement('div');
                 p.className = 'particle';
                 p.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
                 p.style.left = x + 'px';
                 p.style.top = y + 'px';
-                
-                // Tính toán hướng bay ngẫu nhiên
                 const angle = Math.random() * Math.PI * 2;
-                const dist = Math.random() * 100 + 20; // Khoảng cách bay
+                const dist = Math.random() * 100 + 20;
                 p.style.setProperty('--tx', `${Math.cos(angle) * dist}px`);
                 p.style.setProperty('--ty', `${Math.sin(angle) * dist}px`);
-                
                 document.body.appendChild(p);
-                // Xóa hạt sau khi bay xong để nhẹ máy
                 setTimeout(() => p.remove(), 800);
             }
         }
 
         function renderPhoto() {
             stack.innerHTML = '';
-            // Tạo các lớp ảnh nền
             for(let i=0; i<3; i++) {
                 const layer = document.createElement('div');
                 layer.className = 'polaroid';
@@ -241,7 +234,6 @@
                 stack.appendChild(layer);
             }
 
-            // Tạo ảnh chính
             const activePhoto = document.createElement('div');
             activePhoto.className = 'polaroid';
             activePhoto.style.zIndex = 10;
@@ -255,7 +247,6 @@
             stack.appendChild(activePhoto);
 
             setTimeout(() => {
-                // Xoay nhẹ ảnh chính ngẫu nhiên
                 activePhoto.style.transform = 'scale(1) rotate(' + (Math.random() * 4 - 2) + 'deg)';
                 activePhoto.style.opacity = '1';
             }, 50);
@@ -263,35 +254,27 @@
             document.getElementById('cur').innerText = current;
         }
 
-        // Xử lý khi chạm vào ngăn xếp ảnh
         stack.onclick = () => {
             const active = stack.querySelector('.polaroid:last-child');
             if (!active) return;
 
-            // Lấy tọa độ chính xác của tấm ảnh đang hiển thị
             const rect = active.getBoundingClientRect();
-            
-            // Tạo mảng chứa tọa độ 4 góc
             const corners = [
-                {x: rect.left, y: rect.top},      // Góc trên trái
-                {x: rect.right, y: rect.top},     // Góc trên phải
-                {x: rect.left, y: rect.bottom},   // Góc dưới trái
-                {x: rect.right, y: rect.bottom}   // Góc dưới phải
+                {x: rect.left, y: rect.top},      
+                {x: rect.right, y: rect.top},     
+                {x: rect.left, y: rect.bottom},   
+                {x: rect.right, y: rect.bottom}   
             ];
 
-            // Bắn pháo hoa tại 4 góc với độ trễ siêu nhỏ để tự nhiên hơn
             corners.forEach((corner, index) => {
                 setTimeout(() => {
                     createFirework(corner.x, corner.y);
-                }, index * 30); // Mỗi góc cách nhau 30ms
+                }, index * 30);
             });
 
-            // Chuyển ảnh
             if (current < photosCount) {
-                // Hiệu ứng bay đi của ảnh cũ
                 active.style.transform = 'translateX(150%) rotate(30deg) scale(0.8)';
                 active.style.opacity = '0';
-                
                 current++;
                 setTimeout(renderPhoto, 300);
             } else {
@@ -307,14 +290,12 @@
                 l.style.display = 'flex';
                 setTimeout(() => {
                     l.classList.add('show');
-                    // Bắn pháo hoa mừng khi hiện thư
                     createFirework(window.innerWidth/2, window.innerHeight/2);
                     setTimeout(() => createFirework(window.innerWidth/2, window.innerHeight/3), 300);
                 }, 100);
             }, 500);
         }
 
-        // Tạo tim bay nền ngẫu nhiên
         setInterval(() => {
             const h = document.createElement('div');
             h.className = 'heart';
